@@ -13,3 +13,40 @@ datasource db {
   provider = "postgresql"
 }
 
+
+model User {
+    id String @id @default(cuid())
+    email String @unique
+    username String @unique
+    avatar String?
+    password String
+    chimeras Chimera[] @relation("createdByUser")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Chimera {
+    id String @id @default(cuid())
+    name String
+    healthPoints Int 
+    attack Int
+    defence Int
+    speed Int
+    level Int
+    ownerId String
+    owner User @relation("createdByUser", fields:[ownerId], references:[id])
+    victoryBattles Battle[] @relation("Victory_Battles")
+    defeatedBattles Battle[] @relation("Defeated_Battles")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Battle {
+    id String @id @default(cuid())
+    winnerId String
+    loserId String
+    winner Chimera @relation("Victory_Battles", fields:[winnerId],references:[id])
+    loser Chimera @relation("Defeated_Battles",fields:[loserId],references:[id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
