@@ -13,6 +13,12 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        const email = profile.emails?.[0]?.value || profile._json?.email;
+
+        if (!email) {
+          // If no email, fail the authentication
+          return done(new Error("No email provided by Google"), undefined);
+        }
         const userData = {
           name:
             profile.displayName ||
@@ -20,10 +26,8 @@ passport.use(
               profile.name?.familyName || ""
             }`.trim() ||
             profile._json?.name ||
-            null,
-          email: profile.emails?.[0]?.value || profile._json?.email || null,
-          picture: profile.photos?.[0]?.value || profile._json?.picture || null,
-          provider: profile.provider || "google",
+            "UNKNOWN",
+          email: email,
         };
 
         // ✅ done(null, userData) → Passport will attach it to req.user
