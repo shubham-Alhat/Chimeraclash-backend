@@ -25,7 +25,7 @@ app.use(express.static("public"));
 app.use(passport.initialize());
 
 app.get("/api/v1/checkme", (req, res) => {
-  return res.status(200).json({ message: "hello server.." });
+  return res.status(201).json({ message: "hello server" });
 });
 
 app.use("/api/v1/auth", authRoutes);

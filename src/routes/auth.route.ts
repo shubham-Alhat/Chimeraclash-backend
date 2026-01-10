@@ -1,8 +1,13 @@
 import express from "express";
 import passport from "passport";
 import { handleOAuthCallback } from "../lib/handleOAuthCallback";
+import { loginUser, registerNewUser } from "../controllers/auth.controller.js";
 
 const router = express.Router();
+
+router.route("/signup").post(registerNewUser);
+
+router.route("/login").post(loginUser);
 
 // google login
 router.get("/login/google", (req, res, next) => {

@@ -6,7 +6,7 @@ import crypto from "crypto";
 
 dotenv.config();
 
-const generateAccessToken = (id: string, email: string): string => {
+export const generateAccessToken = (id: string, email: string): string => {
   const secretKey = process.env.JWT_SECRET;
 
   if (!secretKey) {
@@ -23,7 +23,7 @@ const generateAccessToken = (id: string, email: string): string => {
   });
 };
 
-const COOKIE_OPTIONS: CookieOptions = {
+export const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: true,
   sameSite: "lax",
