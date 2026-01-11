@@ -78,8 +78,8 @@ export const handleOAuthCallback = async (req: Request, res: Response) => {
     const token = generateAccessToken(user.id, user.email);
 
     const redirectUrl = isNewUser
-      ? `${process.env.FRONTEND_URL}/battle?newUser=true`
-      : `${process.env.FRONTEND_URL}/battle`;
+      ? `${process.env.FRONTEND_URL}/home?newUser=true`
+      : `${process.env.FRONTEND_URL}/home`;
 
     return res
       .cookie("accessToken", token, COOKIE_OPTIONS)

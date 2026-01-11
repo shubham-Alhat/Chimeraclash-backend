@@ -37,9 +37,6 @@ export const authMiddleware = async (
       where: {
         id: decodedToken?.id,
       },
-      omit: {
-        password: true,
-      },
     });
 
     if (!user) {
