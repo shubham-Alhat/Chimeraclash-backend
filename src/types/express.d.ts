@@ -6,6 +6,18 @@ declare global {
       email: string;
       name: string;
     }
+
+    interface Request {
+      authUser: {
+        id: string;
+        username: string;
+        email: string;
+        password?: string;
+        avatar?: string | null;
+        createdAt?: Date;
+        updatedAt?: Date;
+      };
+    }
   }
 }
 

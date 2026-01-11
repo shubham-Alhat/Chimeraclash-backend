@@ -10,6 +10,27 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const authUser = req.authUser;
+
+    if (!authUser) {
+      return res
+        .status(404)
+        .json({ message: "authUser not found", success: false, data: null });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Authorized user", success: true, data: authUser });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error while get User", success: false, data: null });
+  }
+};
+
 export const registerNewUser = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
@@ -125,14 +146,11 @@ export const loginUser = async (req: Request, res: Response) => {
       email: user.email,
     };
 
-    return res
-      .status(200)
-      .cookie("accessToken", token, COOKIE_OPTIONS)
-      .json({
-        message: "User login successfully",
-        success: true,
-        data: safeUser,
-      });
+    return res.status(200).cookie("accessToken", token, COOKIE_OPTIONS).json({
+      message: "User login successfully",
+      success: true,
+      data: safeUser,
+    });
   } catch (error) {
     console.log(error);
     return res

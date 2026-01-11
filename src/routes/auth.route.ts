@@ -1,9 +1,16 @@
 import express from "express";
 import passport from "passport";
 import { handleOAuthCallback } from "../lib/handleOAuthCallback";
-import { loginUser, registerNewUser } from "../controllers/auth.controller.js";
+import {
+  getUser,
+  loginUser,
+  registerNewUser,
+} from "../controllers/auth.controller.js";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+
+router.route("/me").get(authMiddleware, getUser);
 
 router.route("/signup").post(registerNewUser);
 
