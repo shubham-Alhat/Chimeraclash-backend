@@ -10,6 +10,62 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export const completeUserProfile = async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+
+    const prevUser = req.authUser;
+
+    if (!prevUser) {
+      return res
+        .status(401)
+        .json({ message: "User not found", success: false, data: null });
+    }
+
+    if (!username || !password) {
+      return res.status(409).json({
+        message: "Both fields are required",
+        success: false,
+        data: null,
+      });
+    }
+
+    // hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: prevUser.id,
+      },
+      data: {
+        username: username,
+        password: hashPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        avatar: true,
+        createdAt: true,
+      },
+    });
+
+    return res.status(200).json({
+      message: "User onboarded success",
+      success: true,
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Error while onboarding user",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const getUser = async (req: Request, res: Response) => {
   try {
     const authUser = req.authUser;

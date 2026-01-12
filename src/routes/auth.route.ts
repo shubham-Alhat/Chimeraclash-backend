@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import { handleOAuthCallback } from "../lib/handleOAuthCallback";
 import {
+  completeUserProfile,
   getUser,
   loginUser,
   registerNewUser,
@@ -9,6 +10,8 @@ import {
 import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+
+router.route("/complete-profile").post(authMiddleware, completeUserProfile);
 
 router.route("/me").get(authMiddleware, getUser);
 
